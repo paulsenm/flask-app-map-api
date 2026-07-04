@@ -23,8 +23,16 @@ def get_parks_web():
 def gps_from_pc():
     pluscode = request.args.get('pc')
     coord_code_area = decode(pluscode)
-    print(coord_code_area)
-    return str(coord_code_area)
+    center_lat = coord_code_area.latitudeCenter
+    center_lon = coord_code_area.longitudeCenter
+    response = [center_lat, center_lon]
+    
+    return response
+
+@app.route('/api/dummy', methods=['GET'])
+def dummy_api_call():
+    return('dummy api call result')
+
 
 if __name__ == '__main__':
     app.run()
