@@ -1,8 +1,7 @@
-import requests
 from flask import Flask, request
 import overpy
 
-from poi_test import get_parks, get_intersections
+from poi_test import get_parks, get_intersections, add_resource_pins_db
 from gps_from_pluscode import decode
 
 app = Flask(__name__)
@@ -28,6 +27,15 @@ def gps_from_pc():
     response = [center_lat, center_lon]
     
     return response
+
+@app.route('/api/db/add-resources', methods=['GET'])
+def add_resources_db():
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+    print('lat and lon were: ', lat, ', ', lon)
+    add_resource_pins_db(lat, lon)
+    return 'added'
+    
 
 @app.route('/api/dummy', methods=['GET'])
 def dummy_api_call():

@@ -1,4 +1,10 @@
 import requests, json
+
+from mapgame_db import add_resource_group
+
+RESOURCE_DISTANCE_DB = 1000
+OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+
 HEADERS = {
         "User-Agent": "MichaelTestARGame/0.1 (learning project; contact: https://github.com/paulsenm)",
         "Accept": "application/json",
@@ -10,7 +16,7 @@ def get_intersections(lat, lon):
     out body;
     """
     
-    url = "https://overpass-api.de/api/interpreter"
+    url = OVERPASS_URL
     
     headers = HEADERS
     
@@ -27,6 +33,22 @@ def get_intersections(lat, lon):
         lon = node.get('lon')
         coord_array.append([lat, lon])
     return coord_array
+
+def add_resource_pins_db(lat, lon):
+    query = f"""
+    [out:json][timeout:25];
+    node(around:{RESOURCE_DISTANCE_DB},{lat},{lon})[amenity];
+    out body;
+    """
+    r = requests.post(OVERPASS_URL, data={'data':query}, headers=HEADERS)
+    print('status: ', r.status_code)
+    response = r.text
+    json_results = json.loads(response)
+    elements = json_results.get('elements')
+    add_resource_group(elements)
+    print('added resources to db')
+
+
 
 def get_parks(lat, lon):
     query = f"""
