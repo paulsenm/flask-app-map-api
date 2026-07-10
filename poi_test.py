@@ -32,6 +32,7 @@ def get_intersections(lat, lon):
         lat = node.get('lat')
         lon = node.get('lon')
         coord_array.append([lat, lon])
+    
     return coord_array
 
 def add_resource_pins_db(lat, lon):
@@ -64,6 +65,8 @@ def get_parks(lat, lon):
     r = requests.post(url, data={"data": query}, headers=headers)
     
     print("status:", r.status_code)
+    # if r.status_code != '200':
+    #     return [[0,0], 'none', 'bla']
     results = r.text
     json_resutls = json.loads(results)
     park_data = []
