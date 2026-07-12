@@ -44,4 +44,5 @@ def dummy_api_call():
 
 if __name__ == '__main__':
     app.run(host='192.168.49.1')
+    #app.run()
 
